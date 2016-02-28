@@ -6,11 +6,14 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+#define BUFFER_SIZE 256
+
 void DieWithError(char *message);
 
 int main(int argc, char *argv[]) {
   int serverSock, clientSock, portNo;
   socklen_t clilen;
+  char buffer[BUFFER_SIZE];
   struct sockaddr_in serv_addr, cli_addr;
   int closeStatus;
 
@@ -52,15 +55,13 @@ int main(int argc, char *argv[]) {
       DieWithError("accept() failed\n");
       break;
     }
-    else {
-      fprintf(stdout, "connected");
-    }
-
-   send(clientSock, "Hello TCP", 10 , 0);
-
+    recv(clientSock,buffer, BUFFER_SIZE, 0);
+    fprintf(stdout, "%s", buffer);
+    
+    send(clientSock, "Hello from TCP Server", 10 , 0);
+    closeStatus = close(serverSock);
   }
 
-  closeStatus = close(serverSock);
 
   return 0;
 }
