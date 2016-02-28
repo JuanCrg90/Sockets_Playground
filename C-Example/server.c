@@ -44,6 +44,8 @@ int main(int argc, char *argv[]) {
     DieWithError("listen() failed\n");
   }
 
+  fprintf(stdout, "Server Ready in port %d\n", portNo);
+
   while(1)
   {
     clilen = sizeof(cli_addr);
@@ -53,15 +55,18 @@ int main(int argc, char *argv[]) {
     if(clientSock < 0) 
     {
       DieWithError("accept() failed\n");
-      break;
     }
     recv(clientSock,buffer, BUFFER_SIZE, 0);
-    fprintf(stdout, "%s", buffer);
+    fprintf(stdout, "%s\n", buffer);
     
-    send(clientSock, "Hello from TCP Server", 10 , 0);
-    closeStatus = close(serverSock);
-  }
+    send(clientSock, "Hello from TCP Server", 21 , 0);
 
+
+    closeStatus = close(serverSock);
+    break;
+  }
+  
+  fprintf(stdout, "Bye Bye");
 
   return 0;
 }
